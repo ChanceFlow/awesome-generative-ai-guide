@@ -2,57 +2,57 @@
 
 ![Agentic AI 速成课程封面](./hero-image.png)
 
-**掌握现实世界中 Agentic AI 的所有必备知识**
+**掌握现实世界中智能体式（Agentic）AI 的核心知识**
 
 *由 [Aishwarya Reganti](https://www.linkedin.com/in/areganti/) 和 [Kiriti Badam](https://www.linkedin.com/in/sai-kiriti-badam/) 联合打造*
 
 ---
 
-## ❗❗在开始学习前请务必阅读，因为许多博主传播了关于本课程的不实信息
+## ❗❗开始学习前请务必阅读：关于本课程的常见误传
 
-**不实说法：本课程曾在麻省理工学院（MIT）和牛津大学授课**<br/>
-真实情况：两位讲师确实曾在 MIT 和牛津大学教授专业 AI 课程，但本门速成课程从未在这些院校开设过。
+- **误传：本课程曾在麻省理工学院（MIT）和牛津大学授课**<br/>
+  **事实**：两位讲师确实曾在 MIT 和牛津大学教授专业 AI 项目，但这门“速成课程”从未在这些院校开设。
 
-**不实说法：本课程原售价 2500 美元，现在免费开放**<br/>
-真实情况：这是一门简短的入门课程，标题明确标注为“速成课程”。我们绝不会将这样的课程定价为 2500 美元，它从一开始就是免费的。
+- **误传：本课程原价 2500 美元，现在免费开放**<br/>
+  **事实**：这是一门简短的入门课程（标题已标明“速成课程”）。我们不会将其定价为 2500 美元；它从一开始就是免费的。
 
-**不实说法：本课程将彻底改变你的人生并保证你找到工作**<br/>
-真实情况：本课程为你提供了一个扎实的入门途径，帮助你建立信心并熟悉 Agentic AI 领域。但它并非魔法门票，我们从未做出过这样的承诺。
+- **误传：本课程将“改变人生”并保证就业**<br/>
+  **事实**：本课程提供扎实的入门路径，帮助你建立信心、熟悉智能体式 AI 领域，但它不是“魔法门票”，我们也从未做出此类承诺。
 
-我们投入了大量心血，力求课程简洁实用，成为真正优质的入门资源。我们很高兴它获得了关注，但希望大家基于正确的理由来学习，而非那些我们从未做出过的承诺。
+我们投入了大量心血，力求课程**简洁、实用、易上手**。我们很高兴它受到关注，也希望大家基于正确的理由来学习，而不是基于我们从未做出的承诺。
 
 ---
 ## 📚 课程内容
 
-### [第 1 部分：AI 智能体到底是什么？](./part1_what_are_ai_agents_anyway.md)
-了解生成式 AI 与 Agentic AI 的根本区别、核心能力以及实际应用场景。
+### [第 1 部分：AI 智能体到底是什么？](./part1_what_are_ai_agents_anyway_zh.md)
+了解生成式 AI 与智能体式（Agentic）AI 的根本区别、核心能力以及实际应用场景。
 
-### [第 2 部分：4 种 Agentic 系统类型（及适用场景）](./part2_the_4_types_of_agentic_systems.md)
+### [第 2 部分：4 种 Agentic 系统类型（及适用场景）](./part2_the_4_types_of_agentic_systems_zh.md)
 探索工作流智能体、半自主智能体、基于规则的系统和自主智能体，以及它们的决策框架。
 
-### [第 3 部分：AI 中的工具是什么？](./part3_what_are_tools_in_ai.md)
+### [第 3 部分：AI 中的工具是什么？](./part3_what_are_tools_in_ai_zh.md)
 学习 AI 模型集成、API 连接、工具生态系统以及自定义工具开发。
 
-### [第 4 部分：什么是 RAG，以及如何使其具备 Agentic 特性？](./part4_what_is_rag_and_agentic.md)
+### [第 4 部分：什么是 RAG，以及如何使其具备 Agentic 特性？](./part4_what_is_rag_and_agentic_zh.md)
 深入探讨检索增强生成（RAG）技术、传统 RAG 与 Agentic RAG 的区别，以及实现模式。
 
-### [第 5 部分：什么是 MCP，为什么你应该关注？](./part5_what_is_mcp_and_why_care.md)
+### [第 5 部分：什么是 MCP，为什么你应该关注？](./part5_what_is_mcp_and_why_care_zh.md)
 了解模型上下文协议（MCP）、AI 模型集成策略以及企业级实现方案。
 
-### [第 6 部分：智能体中的规划与推理模型](./part6_planning_in_agents_reasoning_models.md)
+### [第 6 部分：智能体中的规划与推理模型](./part6_planning_in_agents_reasoning_models_zh.md)
 智能体规划策略、推理模型集成以及高级推理能力。
 
-### [第 7 部分：智能体中的记忆系统](./part7_memory_in_agents.md)
+### [第 7 部分：智能体中的记忆系统](./part7_memory_in_agents_zh.md)
 短期和长期记忆系统、架构模式以及性能优化。
 
-### [第 8 部分：多智能体系统](./part8_multi_agent_systems.md)
+### [第 8 部分：多智能体系统](./part8_multi_agent_systems_zh.md)
 多智能体架构、分层模式、协调策略以及可扩展性考虑。
 
-### [第 9 部分：现实世界中的 Agentic 系统（深入剖析）](./part9_real_world_agentic_systems.md)
+### [第 9 部分：现实世界中的 Agentic 系统（深入剖析）](./part9_real_world_agentic_systems_zh.md)
 生产系统案例研究、架构模式以及企业级实现的经验教训。
 
-### [第 10 部分：AI 智能体经验总结与未来展望](./part10_ai_agent_lessons_whats_ahead.md)
-Agentic AI 的最新发展、未来趋势、行业路线图以及新兴技术。
+### [第 10 部分：AI 智能体经验总结与未来展望](./part10_ai_agent_lessons_whats_ahead_zh.md)
+智能体式（Agentic）AI 的最新发展、未来趋势、行业路线图以及新兴技术。
 
 ---
 
@@ -80,10 +80,10 @@ Agentic AI 的最新发展、未来趋势、行业路线图以及新兴技术。
 
 ## 🚀 开始学习
 
-导航至 **第 1 部分**，开启你的 Agentic AI 学习之旅！
+从 **第 1 部分** 开始，开启你的智能体式 AI 学习之旅！
 
-[🎯 从第 1 部分开始：AI 智能体到底是什么？](./part1_what_are_ai_agents_anyway.md)
+[🎯 从第 1 部分开始：AI 智能体到底是什么？](./part1_what_are_ai_agents_anyway_zh.md)
 
 ---
 
-**祝你学习愉快！** 🎉
+**祝你学习愉快！**
