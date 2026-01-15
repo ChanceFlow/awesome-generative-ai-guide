@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 智能体到底是什么？ - Agentic AI Crash Course</title>
+<style>
+  :root {
+    /* 手帐风主题色：原木手帐风格 */
+    --primary-color: #5b4f44; /* 墨色/标题色 */
+    --accent-color: #c08457;  /* 贴纸/强调色 */
+    --bg-color: #e9dfd2;      /* 桌面/外壳底 */
+    --text-color: #3f3a32;    /* 正文墨色 */
+    --card-bg: #fdf8f1;       /* 纸张底色 */
+    --paper-alt: #f7efe5;     /* 另一张纸 */
+    --line-color: rgba(120, 105, 90, 0.18);  /* 笔记横线 */
+    --margin-line: rgba(198, 120, 110, 0.35); /* 书写边线 */
+    --highlight-color: rgba(255, 219, 126, 0.65); /* 荧光笔 */
+    --sub-text: #6b6457;
+
+    /* 2K 竖屏卡片设计画布 */
+    --design-w: 1500px;
+    --design-h: 2000px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Kaiti SC', 'KaiTi', 'STKaiti', 'FangSong', 'Microsoft YaHei', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .mobile-container {
+    /* 锁定 3:4 比例 */
+    width: min(720px, 100vw, calc(100vh * 3 / 4));
+    background: var(--card-bg);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+    border: 1px solid rgba(90, 75, 60, 0.25);
+    border-radius: 18px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    height: 100vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: row;
+  }
+  .mobile-container::-webkit-scrollbar { display: none; }
+
+  .slide {
+    width: 100%;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    background-color: var(--card-bg);
+    border-right: 1px dashed rgba(120, 105, 90, 0.25);
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-image:
+      linear-gradient(90deg, var(--margin-line) 0 2px, transparent 2px),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 30px, var(--line-color) 31px);
+    background-size: 100% 100%, 100% 31px;
+    background-position: 0 0, 0 12px;
+  }
+  .slide:nth-child(even) { background-color: var(--paper-alt); }
+
+  .slide.cover {
+    background: linear-gradient(135deg, #f6e6cf 0%, #f2d8bb 100%);
+    color: #3f352b;
+    align-items: center;
+    text-align: center;
+    background-image: none;
+  }
+
+  /* 字体与排版 */
+  h1 { font-size: clamp(30px, 3.4em, 56px); margin: 0 0 22px 0; line-height: 1.1; letter-spacing: 0.01em; }
+  h2 {
+    font-size: clamp(24px, 2.5em, 44px);
+    color: var(--primary-color);
+    margin: 0 0 28px 0;
+    width: 100%;
+    line-height: 1.3;
+    padding-bottom: 8px;
+    border-bottom: 3px dashed var(--accent-color);
+  }
+  p { font-size: clamp(18px, 1.38em, 26px); line-height: 1.6; margin: 16px 0; color: #4a4339; }
+  .slide.cover p { color: #5a4d41; font-size: clamp(18px, 1.25em, 24px); }
+
+  strong {
+    color: var(--text-color);
+    font-weight: 700;
+    background: linear-gradient(transparent 52%, var(--highlight-color) 52%);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .big-icon {
+    font-size: 6em;
+    margin-bottom: 30px;
+    align-self: center;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+    transform: rotate(-2deg);
+  }
+
+  .logo-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 28px;
+    margin-bottom: 30px;
+    padding: 8px;
+    background: #fff;
+    border: 2px solid rgba(120, 105, 90, 0.2);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+  }
+
+  .quote-card {
+    background: #fff6cc;
+    border: 2px dashed rgba(120, 105, 90, 0.35);
+    padding: 26px;
+    border-radius: 14px;
+    font-size: clamp(18px, 1.35em, 26px);
+    margin: 20px 0;
+    width: 100%;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.08);
+    color: #4a4339;
+    line-height: 1.6;
+    transform: rotate(-0.4deg);
+  }
+
+  .flow-card {
+    background: #fffaf3;
+    color: #5b4f44;
+    padding: 20px;
+    border-radius: 14px;
+    font-size: clamp(18px, 1.35em, 26px);
+    text-align: center;
+    font-weight: 700;
+    width: 100%;
+    margin: 10px 0;
+    border: 2px solid var(--accent-color);
+  }
+
+  .arrow-down {
+    color: var(--accent-color);
+    text-align: center;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .arrow-down svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: clamp(28px, 3.2em, 52px);
+    color: rgba(60, 50, 40, 0.25);
+    user-select: none;
+  }
+
+  .spacer { flex-grow: 1; }
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+
+  <!-- P1: 封面 -->
+  <div class="slide cover">
+    <div style="width:180px; height:180px; margin-bottom:30px; display:flex; align-items:center; justify-content:center; border-radius:32px; background: rgba(255,255,255,0.7); border:2px dashed rgba(120,105,90,0.35); box-shadow: 0 8px 16px rgba(0,0,0,0.12);">
+      <svg width="120" height="120" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Agent Icon">
+        <rect x="18" y="24" width="104" height="84" rx="22" stroke="rgba(90,75,60,0.9)" stroke-width="8"/>
+        <circle cx="52" cy="64" r="8" fill="rgba(90,75,60,0.9)"/>
+        <circle cx="88" cy="64" r="8" fill="rgba(90,75,60,0.9)"/>
+        <path d="M46 90C56 98 84 98 94 90" stroke="rgba(90,75,60,0.9)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M42 24L30 10" stroke="rgba(90,75,60,0.9)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M98 24L110 10" stroke="rgba(90,75,60,0.9)" stroke-width="8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>AI 智能体<br>到底是什么？</h1>
+    <p>Agentic AI Crash Course Part 1<br>从“对话”到“行动”的进化</p>
+    <div style="background: rgba(255,255,255,0.7); border:2px dashed rgba(120,105,90,0.35); color:#4a4339; margin-top:40px; padding:20px; border-radius:12px; width:100%;">
+      <p style="color:#4a4339; margin:0;">
+        <strong>核心结论</strong><br>
+        智能体 = LLM（大脑）+ 工具（双手）<br>
+        它不仅能理解，更能执行操作。
+      </p>
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P2: 问题/现状 -->
+  <div class="slide">
+    <span class="big-icon">🤔</span>
+    <h2>为什么我们需要<br>智能体？</h2>
+    <p>2022 年 ChatGPT 让“对话体验”普及。你可以和 AI 聊天、问答、写诗。</p>
+    <p>但到了 2024 年，我们发现<strong>“光有对话还不够”</strong>。</p>
+    <div class="quote-card" style="background:#ffe9e7; color:#7a3a32; border-color:#e9b3ab;">
+      <strong>痛点：</strong><br>
+      AI 给了你建议，但事情还得你自己做。<br>
+      它不能直接发邮件、不能自动归档文件、不能操作 CRM。
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P3: 核心定义 -->
+  <div class="slide">
+    <span class="big-icon">💡</span>
+    <h2>什么是 Agent？</h2>
+    <p>简单实用的定义：</p>
+    <div class="quote-card">
+      生成式 AI 擅长<strong>理解和生成</strong>内容。<br><br>
+      Agentic AI 则更进一步——它不仅能理解，还能<strong>使用工具执行操作</strong>。
+    </div>
+    <p>如果说 ChatGPT 是咨询师，那么 Agent 就是<strong>执行者</strong>。</p>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P4: 结构拆解 -->
+  <div class="slide">
+    <span class="big-icon">🧩</span>
+    <h2>智能体的结构</h2>
+    <div class="flow-card" style="background:#fff1df; color:#6a4a2e; border-color:#e0bb8c;">🧠 LLM（大脑）</div>
+    <div class="arrow-down" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 10v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M18 34l14 14 14-14" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="flow-card" style="background:#e8f7ea; color:#2f5b3a; border-color:#a9d5b2;">🛠️ 工具（双手）</div>
+    <div class="arrow-down" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 10v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M18 34l14 14 14-14" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="flow-card">⚡️ 实际行动</div>
+    <p style="font-size:0.9em; margin-top:15px; text-align:center; color:var(--sub-text);">
+      + 规划 (Planning) & 记忆 (Memory)
+    </p>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P5: 核心机制 -->
+  <div class="slide">
+    <span class="big-icon">⚙️</span>
+    <h2>它是如何工作的？</h2>
+    <p>核心机制是<strong>工具调用 (Tool Calling)</strong>。</p>
+    <p>系统告诉智能体：“我有这些工具（API、函数）”，智能体自行判断何时使用。</p>
+    <div class="quote-card">
+      <strong>不再只是输出文本：</strong><br>
+      AI 输出结构化指令：<br>
+      <code>调用 send_email()</code><br>
+      <code>查询数据库 query_db()</code>
+    </div>
+    <p>没有工具，智能体只能空谈；有了工具，它就能付诸行动。</p>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P6: 两种视角 -->
+  <div class="slide">
+    <span class="big-icon">👀</span>
+    <h2>怎么看待它？</h2>
+    <div class="quote-card" style="background:#f4eefb; color:#54495f; border-color:#9b7bd1;">
+      <strong>技术视角：</strong><br>
+      它是 LLM + 工具 + 记忆 + 规划的<strong>工程封装</strong>。底层模型没变，但能力边界扩展了。
+    </div>
+    <div class="quote-card" style="background:#e8f7ea; color:#2f5b3a; border-color:#a9d5b2;">
+      <strong>业务视角：</strong><br>
+      它是一个能<strong>端到端完成任务</strong>的系统。
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P7: 构建思维 -->
+  <div class="slide">
+    <span class="big-icon">🚧</span>
+    <h2>构建时的陷阱</h2>
+    <p>不要为了做智能体而做智能体。</p>
+    <p><strong>错误路径：</strong><br>“让我们搞个 Agent 吧！” → 然后找钉子。</p>
+    <p><strong>正确路径：</strong><br>“客服被重复查询淹没了” → <strong>痛点</strong> → “Agent 可以自动检索回复并关闭工单”。</p>
+    <div class="quote-card" style="background:#ffe9e7; color:#7a3a32; border-color:#e9b3ab;">
+      <strong>关键决策：</strong><br>
+      自主性 vs 可控性。<br>
+      你需要 AI 有多自由？还是需要人工审核？这取决于风险。
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P8: 总结 -->
+  <div class="slide">
+    <span class="big-icon">📝</span>
+    <h2>总结 Takeaways</h2>
+    <div class="quote-card">
+      <strong>1. 核心差异</strong><br>
+      生成式 AI = 生成内容；<br>
+      Agentic AI = <strong>生成 + 执行</strong>。
+    </div>
+    <div class="quote-card">
+      <strong>2. 关键组件</strong><br>
+      LLM 是大脑，工具是双手。工具调用让模型与世界连接。
+    </div>
+    <div class="quote-card">
+      <strong>3. 落地思维</strong><br>
+      从现实痛点出发，平衡自主性与人工控制。
+    </div>
+    <div class="spacer"></div>
+    <div style="font-size:0.9em; color:var(--sub-text); text-align:center; padding-bottom:20px;">
+      Source: Agentic AI Crash Course Part 1
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
