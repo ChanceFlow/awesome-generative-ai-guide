@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 种 Agentic 系统类型（及适用场景）</title>
+<style>
+  :root {
+    /* 手帐风主题色（纸张/墨色/贴纸） - 原木手帐风格 */
+    --primary-color: #5b4f44; /* 墨色/标题色 */
+    --accent-color: #c08457;  /* 贴纸/强调色 */
+    --bg-color: #e9dfd2;      /* 桌面/外壳底 */
+    --text-color: #3f3a32;    /* 正文墨色 */
+    --card-bg: #fdf8f1;       /* 纸张底色 */
+    --paper-alt: #f7efe5;     /* 另一张纸 */
+    --line-color: rgba(120, 105, 90, 0.18);  /* 笔记横线 */
+    --margin-line: rgba(198, 120, 110, 0.35); /* 书写边线 */
+    --highlight-color: rgba(255, 219, 126, 0.65); /* 荧光笔 */
+    --sub-text: #6b6457;
+
+    /* 2K 竖屏卡片设计画布（4:5），用于“字号尺度感”参考 */
+    --design-w: 1600px; /* 4 */
+    --design-h: 2000px; /* 5 */
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Kaiti SC', 'KaiTi', 'STKaiti', 'FangSong', 'Microsoft YaHei', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .mobile-container {
+    /*
+      固定页面比例为 4:5（2K 竖屏卡片思路）：
+      - 高度跟随视口：100vh
+      - 宽度锁定为 4/5 * 高度（同时不超过屏宽与最大宽度）
+    */
+    width: min(720px, 100vw, calc(100vh * 4 / 5));
+    background: var(--card-bg);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+    border: 1px solid rgba(90, 75, 60, 0.25);
+    border-radius: 18px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    height: 100vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: row;
+  }
+  .mobile-container::-webkit-scrollbar { display: none; }
+
+  .slide {
+    width: 100%;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    background-color: var(--card-bg);
+    border-right: 1px dashed rgba(120, 105, 90, 0.25);
+    position: relative;
+    overflow: hidden; /* 强制：每页一屏，禁止上下滚动 */
+    background-image:
+      linear-gradient(90deg, var(--margin-line) 0 2px, transparent 2px),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 30px, var(--line-color) 31px);
+    background-size: 100% 100%, 100% 31px;
+    background-position: 0 0, 0 12px;
+  }
+  .slide:nth-child(even) { background-color: var(--paper-alt); }
+
+  .slide.cover {
+    background: linear-gradient(135deg, #f6e6cf 0%, #f2d8bb 100%);
+    color: #3f352b;
+    align-items: center;
+    text-align: center;
+    background-image: none;
+  }
+
+  /*
+    移动端优先：整体字号再大一档。
+    说明：这里用 em 保持“比例一致”，需要更大就整体上调这些数值。
+  */
+  h1 { font-size: clamp(30px, 3.4em, 56px); margin: 0 0 22px 0; line-height: 1.1; letter-spacing: 0.01em; }
+  h2 {
+    font-size: clamp(24px, 2.5em, 44px);
+    color: var(--primary-color);
+    margin: 0 0 28px 0;
+    width: 100%;
+    line-height: 1.3;
+    padding-bottom: 8px;
+    border-bottom: 3px dashed var(--accent-color);
+  }
+  p { font-size: clamp(18px, 1.38em, 26px); line-height: 1.6; margin: 16px 0; color: #4a4339; }
+  .slide.cover p { color: #5a4d41; font-size: clamp(18px, 1.25em, 24px); }
+
+  strong {
+    color: var(--text-color);
+    font-weight: 700;
+    background: linear-gradient(transparent 52%, var(--highlight-color) 52%);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .big-icon {
+    font-size: 6em;
+    margin-bottom: 30px;
+    align-self: center;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+    transform: rotate(-2deg);
+  }
+
+  .logo-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 28px;
+    margin-bottom: 30px;
+    padding: 8px;
+    background: #fff;
+    border: 2px solid rgba(120, 105, 90, 0.2);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+  }
+
+  .quote-card {
+    background: #fff6cc;
+    border: 2px dashed rgba(120, 105, 90, 0.35);
+    padding: 26px;
+    border-radius: 14px;
+    font-size: clamp(18px, 1.35em, 26px);
+    margin: 20px 0;
+    width: 100%;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.08);
+    color: #4a4339;
+    line-height: 1.6;
+    transform: rotate(-0.4deg);
+  }
+
+  .flow-card {
+    background: #fffaf3;
+    color: #5b4f44;
+    padding: 20px;
+    border-radius: 14px;
+    font-size: clamp(18px, 1.35em, 26px);
+    text-align: center;
+    font-weight: 700;
+    width: 100%;
+    margin: 10px 0;
+    border: 2px solid var(--accent-color);
+  }
+
+  .arrow-down {
+    color: var(--accent-color);
+    text-align: center;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .arrow-down svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: clamp(28px, 3.2em, 52px);
+    color: rgba(60, 50, 40, 0.25);
+    user-select: none;
+  }
+
+  .spacer { flex-grow: 1; }
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+
+  <!-- P1: 封面 -->
+  <div class="slide cover">
+    <!-- 主题 SVG Icon 封面 -->
+    <div style="width:200px; height:200px; margin-bottom:30px; display:flex; align-items:center; justify-content:center; border-radius:32px; background: rgba(255,255,255,0.7); border:2px dashed rgba(120,105,90,0.35); box-shadow: 0 8px 16px rgba(0,0,0,0.12);">
+      <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Agent Icon">
+        <rect x="25" y="30" width="90" height="80" rx="12" stroke="rgba(90,75,60,0.9)" stroke-width="8" fill="none"/>
+        <circle cx="50" cy="65" r="8" fill="rgba(90,75,60,0.9)"/>
+        <circle cx="90" cy="65" r="8" fill="rgba(90,75,60,0.9)"/>
+        <path d="M50 90 Q70 100 90 90" stroke="rgba(90,75,60,0.9)" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <line x1="70" y1="30" x2="70" y2="10" stroke="rgba(90,75,60,0.9)" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="70" cy="10" r="6" fill="rgba(90,75,60,0.9)"/>
+      </svg>
+    </div>
+    <h1>4 种 Agentic<br>系统类型</h1>
+    <p>Agentic AI Crash Course<br>第 2 部分：自主性与控制权的平衡</p>
+    <div style="background: rgba(255,255,255,0.7); border:2px dashed rgba(120,105,90,0.35); color:#4a4339; margin-top:40px; padding:20px; border-radius:12px; width:100%;">
+      <p style="color:#4a4339; margin:0;">
+        <strong>核心结论</strong><br>
+        并非所有 AI 都需要完全自主<br>
+        让问题决定设计，而非架构
+      </p>
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P2: 问题/动机 -->
+  <div class="slide">
+    <span class="big-icon">🤔</span>
+    <h2>为什么这很重要？</h2>
+    <p>现在每个团队都想把“智能体”塞进技术栈。</p>
+    <p>但<strong>并非所有智能体都一样</strong>，也不是所有问题都需要高度自主的系统。</p>
+    <div class="quote-card" style="background:#ffe9e7; color:#7a3a32; border-color:#e9b3ab;">
+      <strong>误区：</strong><br>
+      为了用 AI 而用 AI。<br>
+      <strong>真相：</strong><br>
+      如果可以不使用 AI 解决问题，就不要过度复杂化。
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P3: 核心概念 -->
+  <div class="slide">
+    <span class="big-icon">🧠</span>
+    <h2>Agent 的配方</h2>
+    <p>LLM 只是“大脑”，要变成智能体（Agent），还需要四肢和记忆。</p>
+    <div class="flow-card">LLM (大脑)</div>
+    <div class="arrow-down" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+        <path d="M32 10v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+        <path d="M18 34l14 14 14-14" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="flow-card" style="background:#e8f7ea; color:#2f5b3a; border-color:#a9d5b2;">
+      + 工具 (API)<br>
+      + 规划能力<br>
+      + 记忆系统<br>
+      + 控制逻辑
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P4: 1. 基于规则的系统 -->
+  <div class="slide">
+    <span class="big-icon">📜</span>
+    <h2>类型 1：基于规则</h2>
+    <p><strong>低自主性，低控制权</strong></p>
+    <p>根本不使用 LLM，完全基于“如果-那么”的传统逻辑。</p>
+    <div class="quote-card">
+      <strong>适用场景：</strong><br>
+      结构良好、输入输出固定的任务。<br>
+      <em>例：批量重命名文件、Excel 数据搬运。</em>
+    </div>
+    <div class="flow-card" style="background:#fff1df; color:#6a4a2e; border-color:#e0bb8c; font-size: 0.9em;">
+      优点：速度快、可预测<br>
+      缺点：无法处理模糊性
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P5: 2. 工作流智能体 -->
+  <div class="slide">
+    <span class="big-icon">🤝</span>
+    <h2>类型 2：工作流智能体</h2>
+    <p><strong>低自主性，高控制权</strong></p>
+    <p>LLM 增强现有流程，但<strong>人类始终掌握最终决定权</strong>。</p>
+    <div class="quote-card">
+      <strong>适用场景：</strong><br>
+      需要理解/生成内容，但风险敏感的任务。<br>
+      <em>例：生成会议摘要、客服回复建议。</em>
+    </div>
+    <div class="flow-card" style="background:#e8f7ea; color:#2f5b3a; border-color:#a9d5b2; font-size: 0.9em;">
+      LLM 生成建议 → 人类确认/修改 → 执行
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P6: 3. 半自主智能体 -->
+  <div class="slide">
+    <span class="big-icon">🤖</span>
+    <h2>类型 3：半自主智能体</h2>
+    <p><strong>中高自主性，中等控制权</strong></p>
+    <p>真正的 Agentic 系统。能规划、调工具，但有<strong>内置约束</strong>或人工检查点。</p>
+    <div class="quote-card">
+      <strong>适用场景：</strong><br>
+      多步骤但流程清晰的繁琐工作。<br>
+      <em>例：销售线索跟进、合同信息提取。</em>
+    </div>
+    <div class="flow-card" style="background:#fffaf3; font-size: 0.9em;">
+      LLM 规划步骤 → 调用 API → <br>遇到异常回退/人工介入
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P7: 4. 自主智能体 -->
+  <div class="slide">
+    <span class="big-icon">🚀</span>
+    <h2>类型 4：自主智能体</h2>
+    <p><strong>高自主性，低控制权</strong></p>
+    <p>给定宽泛目标，自行决定“做什么、怎么做”。长期运行，跨系统操作。</p>
+    <div class="quote-card" style="background:#ffe9e7; color:#7a3a32; border-color:#e9b3ab;">
+      <strong>适用场景：</strong><br>
+      高工作量、异步、无需持续反馈的任务。<br>
+      <em>例：竞争对手研究、自动化运维修复。</em>
+    </div>
+    <p style="font-size: 0.9em; margin-top:0;"><strong>风险：</strong>若不监控，难以评估或追踪。</p>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P8: 决策框架 -->
+  <div class="slide">
+    <span class="big-icon">🧭</span>
+    <h2>如何选择？</h2>
+    <p>不要从“我想用什么架构”开始，要从<strong>“问题需要什么”</strong>开始。</p>
+    <div class="flow-card" style="text-align:left; padding:15px; font-size: 0.85em;">
+      1. 任务是否结构化且重复？<br>→ <strong>规则系统</strong><br><br>
+      2. 需要人做最终决策？<br>→ <strong>工作流智能体</strong><br><br>
+      3. 多步骤但边界清晰？<br>→ <strong>半自主智能体</strong><br><br>
+      4. 异步、长期、目标宽泛？<br>→ <strong>自主智能体</strong>
+    </div>
+    <div class="scroll-hint">›</div>
+  </div>
+
+  <!-- P9: 总结 -->
+  <div class="slide">
+    <span class="big-icon">📝</span>
+    <h2>总结 Takeaways</h2>
+    <div class="quote-card">
+      <strong>平衡之道</strong><br>
+      自主性越高，控制权越低。根据风险承受力选择。
+    </div>
+    <div class="quote-card">
+      <strong>混合设计</strong><br>
+      单个系统可以混合多种模式：核心部分严控，边缘部分自主。
+    </div>
+    <div class="quote-card">
+      <strong>问题优先</strong><br>
+      让问题决定 Agent 设计，而不是相反。
+    </div>
+    <div class="spacer"></div>
+    <div style="font-size:0.9em; color:#94a3b8; text-align:center; padding-bottom:20px;">
+      Source: Agentic AI Crash Course Part 2
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
